@@ -4,7 +4,6 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
-from sklearn.ensemble import IsolationForest
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
@@ -433,10 +432,17 @@ elif menu == "Anomaly Report":
         unsafe_allow_html=True
     )
 
-    weekly = df.resample("W", on="Order Date")["Sales"].sum().reset_index()
+    weekly = df.dropna(subset=["Order Date"]).resample("W", on="Order Date")["Sales"].sum().reset_index()
 
-    iso = IsolationForest(contamination=0.05, random_state=42, n_jobs=1)
-    weekly["Anomaly"] = iso.fit_predict(weekly[["Sales"]]) == -1
+    # IQR-based anomaly detection (pure pandas/numpy, no native compiled code —
+    # equivalent to ~5% contamination like IsolationForest, but avoids the
+    # segfault triggered by scikit-learn's tree-building routines on this host)
+    q1 = weekly["Sales"].quantile(0.25)
+    q3 = weekly["Sales"].quantile(0.75)
+    iqr = q3 - q1
+    lower_bound = q1 - 1.5 * iqr
+    upper_bound = q3 + 1.5 * iqr
+    weekly["Anomaly"] = (weekly["Sales"] < lower_bound) | (weekly["Sales"] > upper_bound)
 
     anomaly_points = weekly[weekly.Anomaly]
 
