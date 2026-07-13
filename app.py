@@ -11,6 +11,7 @@ from sklearn.decomposition import PCA
 # =============================================================
 # PAGE CONFIG
 # =============================================================
+
 st.set_page_config(
     page_title="Sales Intelligence — Command Deck",
     page_icon="◆",
