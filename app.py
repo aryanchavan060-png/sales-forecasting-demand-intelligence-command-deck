@@ -435,7 +435,7 @@ elif menu == "Anomaly Report":
 
     weekly = df.resample("W", on="Order Date")["Sales"].sum().reset_index()
 
-    iso = IsolationForest(contamination=0.05, random_state=42)
+    iso = IsolationForest(contamination=0.05, random_state=42, n_jobs=1)
     weekly["Anomaly"] = iso.fit_predict(weekly[["Sales"]]) == -1
 
     anomaly_points = weekly[weekly.Anomaly]
