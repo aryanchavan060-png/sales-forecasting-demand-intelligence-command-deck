@@ -331,7 +331,7 @@ if menu == "Sales Overview":
         st.plotly_chart(style_fig(fig), use_container_width=True, theme=None)
 
     with c2:
-        monthly = df.groupby(pd.Grouper(key="Order Date", freq="M"))["Sales"].sum().reset_index()
+        monthly = df.groupby(pd.Grouper(key="Order Date", freq="ME"))["Sales"].sum().reset_index()
         fig2 = px.area(monthly, x="Order Date", y="Sales", title="Monthly Sales Trend")
         fig2.update_traces(line_color="#6C5CE7", fillcolor="rgba(108,92,231,0.12)")
         st.plotly_chart(style_fig(fig2), use_container_width=True, theme=None)
