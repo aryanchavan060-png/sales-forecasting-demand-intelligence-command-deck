@@ -328,13 +328,13 @@ if menu == "Sales Overview":
         yearly = df.groupby("Year")["Sales"].sum().reset_index()
         fig = px.bar(yearly, x="Year", y="Sales", title="Total Sales by Year")
         fig.update_traces(marker_color="#0EA89A", marker_line_width=0)
-        st.plotly_chart(style_fig(fig), width="stretch", theme=None)
+        st.plotly_chart(style_fig(fig), use_container_width=True, theme=None)
 
     with c2:
         monthly = df.groupby(pd.Grouper(key="Order Date", freq="ME"))["Sales"].sum().reset_index()
         fig2 = px.area(monthly, x="Order Date", y="Sales", title="Monthly Sales Trend")
         fig2.update_traces(line_color="#6C5CE7", fillcolor="rgba(108,92,231,0.12)")
-        st.plotly_chart(style_fig(fig2), width="stretch", theme=None)
+        st.plotly_chart(style_fig(fig2), use_container_width=True, theme=None)
 
     st.markdown('<div class="section-label">Filter & Explore</div>', unsafe_allow_html=True)
 
@@ -351,14 +351,14 @@ if menu == "Sales Overview":
         region_chart = filtered.groupby("Region")["Sales"].sum().reset_index()
         fig3 = px.bar(region_chart, x="Region", y="Sales", title="Sales by Region", color="Region",
                       color_discrete_sequence=["#0EA89A", "#6C5CE7", "#E8960B", "#E0475B", "#2E63E7"])
-        st.plotly_chart(style_fig(fig3), width="stretch", theme=None)
+        st.plotly_chart(style_fig(fig3), use_container_width=True, theme=None)
 
     with c4:
         cat_chart = filtered.groupby("Category")["Sales"].sum().reset_index()
         fig4 = px.pie(cat_chart, names="Category", values="Sales", title="Category Mix", hole=0.55,
                       color_discrete_sequence=["#0EA89A", "#6C5CE7", "#E8960B", "#E0475B"])
         fig4.update_traces(textfont_color="#1B2540")
-        st.plotly_chart(style_fig(fig4), width="stretch", theme=None)
+        st.plotly_chart(style_fig(fig4), use_container_width=True, theme=None)
 
 
 # =============================================================
@@ -412,7 +412,7 @@ elif menu == "Forecast Explorer":
                               line=dict(color="#E8960B", width=2, dash="dash"),
                               mode="lines+markers"))
     fig.update_layout(title="Future Demand Forecast")
-    st.plotly_chart(style_fig(fig, height=460), width="stretch", theme=None)
+    st.plotly_chart(style_fig(fig, height=460), use_container_width=True, theme=None)
 
     st.info("Production version can load SARIMA / Prophet / XGBoost saved models.")
 
@@ -456,10 +456,10 @@ elif menu == "Anomaly Report":
         name="Anomaly",
         marker=dict(color="#E0475B", size=10, line=dict(color="#F7F8FC", width=1))
     )
-    st.plotly_chart(style_fig(fig, height=460), width="stretch", theme=None)
+    st.plotly_chart(style_fig(fig, height=460), use_container_width=True, theme=None)
 
     st.markdown('<div class="section-label">Detected Anomalies</div>', unsafe_allow_html=True)
-    st.dataframe(anomaly_points, width="stretch")
+    st.dataframe(anomaly_points, use_container_width=True)
 
 
 # =============================================================
@@ -513,7 +513,7 @@ elif menu == "Demand Segments":
         color_discrete_sequence=["#0EA89A", "#6C5CE7", "#E8960B", "#E0475B"]
     )
     fig.update_traces(marker=dict(size=13, line=dict(width=1, color="#F7F8FC")))
-    st.plotly_chart(style_fig(fig, height=460), width="stretch", theme=None)
+    st.plotly_chart(style_fig(fig, height=460), use_container_width=True, theme=None)
 
     st.markdown('<div class="section-label">Segment Details</div>', unsafe_allow_html=True)
-    st.dataframe(product, width="stretch")
+    st.dataframe(product, use_container_width=True)
